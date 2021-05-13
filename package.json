@@ -1,0 +1,19 @@
+{
+  "name": "playamaya-backend",
+  "version": "1.0.0",
+  "description": "backend typescripted nodejs rest api for playamaya dancing social club Android's application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mick-tz/playamaya-backend.git"
+  },
+  "author": "cupc4ke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mick-tz/playamaya-backend/issues"
+  },
+  "homepage": "https://github.com/Mick-tz/playamaya-backend#readme"
+}
