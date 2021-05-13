@@ -12,21 +12,22 @@
 
 *Los campos que corresponden a un id (uuid) de otro objeto se siguen de "FK" y las llaves primarias (uuid) de "PK"*
 
+*OBS: Se usará NoSQL por lo que no se normalizan las tablas*
 ```
-User: {
+Login: {
     """
-    Modelo abstracto. Contiene los datos genéricos requeridos por cualquier tipo de usuario, puede ser extendido 
+    Modelo abstracto. Contiene los datos genéricos requeridos por cualquier tipo de usuario.
     """
 
     username: Str,
+    correo: Email,
+    password: HashedStr,
+    tokens: Array[csrf_tokens],
     nombres: Str,
     apellidos: Str,
     fecha_nacimiento: Date,                                  "BLANK"
     telefono: Str,
-    genero: Str,                                             "BLANK"
-    correo: Email,
-    password: HashedStr,
-    tokens: Array[csrf_tokens]
+    genero: Str                                              "BLANK"
 
 }
 
@@ -41,9 +42,9 @@ Profesor: {
     imagen: Blob                                                "BLANK"
 }
 
-Estudiante: {
+Usuario: {
     """
-    Extiene a usuario. Representa un estudiante/bailarin.
+    Extiene a user. Representa el perfil de un usuario.
     """
 
     intereses_tipo_baile: Array[TipoBaile],                     "BLANK"   
