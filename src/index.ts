@@ -4,6 +4,10 @@ import { Request, Response, NextFunction } from 'express';
 const exphbs = require('express-handlebars');
 import path from 'path';
 
+// ROUTER'S IMPORTS
+const indexRouter = require('./routers/index')
+const usuariosRouter = require('./routers/usuarios')
+
 // INIT
 const app = express()
 
@@ -15,7 +19,8 @@ app.engine('.hbs', exphbs({
     extname: '.hbs', // extension del archivo
     layoutsDir: path.join(app.get('views'), 'layouts'), // dirección de la carpeta de layouts
     partialsDir: path.join(app.get('views'), 'partials'), // dirección de la carpeta de layouts
-    helpers: require('./lib/helpers')
+    helpers: require('./lib/helpers'),
+    defaulLayout: 'main'
 }));
 app.set('view engine', '.hbs');
 
@@ -27,7 +32,8 @@ app.use(express.urlencoded({extended: false}));
 
 
 // ROUTES // TODO: Usar routers
-app.get('/api/usuarios', (req: Request, res: Response) => res.send('hello world'));
+app.use('/', indexRouter);
+app.use('/api', usuariosRouter);
 
 // STATIC FILES
 app.use(express.static(path.join(__dirname, 'public')));
