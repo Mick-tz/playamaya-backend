@@ -9,27 +9,27 @@ describe('users server', () => {
             .expect('Content-Type', /json/)
             .expect(200)
             .then((response: any) => {
-                expect(response.body).toEqual(
-                    expect.arrayContaining(
+                expect(response.body.usuarios).toEqual(
+                    expect.arrayContaining([
                         expect.objectContaining({
                             username: expect.any(String),
                             nombres: expect.any(String),
-                            apellidos: expect.any(String),
+                            apellidos: expect.any(String)
                             // TODO: Agregar expect de imagen
                             // avatar: expect.any(String),
                         })
-                    )
+                    ])
                 )
             }
         );
     })
-    it('GET /api/usuarios/:id --> usuario especifico', () => {
+    it('GET /api/usuarios/:id --> usuario existente', () => {
         return request(app)
             .get('/api/usuarios/1')
             .expect('Content-Type', /json/)
             .expect(200)
             .then((response: any) => {
-                expect(response.body).toEqual(
+                expect(response.body.usuario).toEqual(
                     expect.objectContaining({
                         username: expect.any(String),
                         nombres: expect.any(String),
@@ -43,7 +43,7 @@ describe('users server', () => {
     })
     it('GET /api/usuarios/:id --> regresa un 404 para un usuario que no existe', () => {
         return request(app)
-            .get('/api/usuarios/1')
+            .get('/api/usuarios/666')
             .expect('Content-Type', /json/)
             .expect(404);
     })
