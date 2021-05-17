@@ -10,6 +10,7 @@ const usuariosRouter = require('./routers/usuarios')
 
 // INIT
 const app = express()
+require('./db/mongoose')
 
 // SETTINGS
 app.set('port', process.env.PORT || 3000);
