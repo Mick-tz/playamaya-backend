@@ -37,7 +37,8 @@ class IndexController {
     docs(req: Request, res: Response) {
         res.render('api', {
             ambiente: process.env.ENVIRONMENT,
-            sesion: 'some-session-token'
+            devSession: 'some-session-token',
+            csrfToken: req.csrfToken()
         })
     }
 }
