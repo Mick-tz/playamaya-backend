@@ -1,16 +1,21 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
-import { Request, Response, NextFunction } from 'express';
+// import { Request, Response, NextFunction } from 'express';
+const sessions = require('client-sessions');
+const csurf = require('csurf');
 const exphbs = require('express-handlebars');
 import path from 'path';
 
+// PROD CONFIG
+// const helmet = require('helmet'); // librería de manipulación del HTTP header para asegurar seguridad
+
 // ROUTER'S IMPORTS
-const indexRouter = require('./routers/index')
-const usuariosRouter = require('./routers/usuarios')
+const indexRouter = require('./routers/index');
+const usuariosRouter = require('./routers/usuarios');
 
 // INIT
-const app = express()
-require('./db/mongoose')
+const app = express();
+require('./db/mongoose');
 
 // SETTINGS
 app.set('port', process.env.PORT || 3000);
@@ -27,10 +32,22 @@ app.set('view engine', '.hbs');
 
 // MIDDLEWARE
 // para serializar json 
-app.use(express.json())
+app.use(express.json());
 // para interpretar datos de formas de html 
 app.use(express.urlencoded({extended: false}));
-
+// para usar cookie sessions 
+app.use(sessions({
+    cookieName: 'session',
+    secret: process.env.SESSIONS_CS,
+    duration: 1000 * 60 * 60 * 24, // TODO: Decidir duración sesion, actual 24 hrs
+    httpOnly: true,  // evita que js pueda accesar a la cookie
+    // secure: true, // PROD REQUIRED!! agrega la cookie vía https unicamente
+    // ephemeral: true // En caso que la sesión deba ser renovada al cerrar la aplicación 
+}));
+// para validar csrf tokens 
+app.use(csurf())
+// PROD REQUIRED!! para manejar seguridad del header
+// app.use(helmet());
 
 // ROUTES // TODO: Usar routers
 app.use('/', indexRouter);
