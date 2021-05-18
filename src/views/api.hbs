@@ -287,6 +287,7 @@
                                     <div class="modal-body">
                                         <form method="POST" action="/api/usuarios" class="forma-nuevo-usuario">
                                             <fieldset>
+                                                <input type="hidden", name="_csrf", value="{{csrfToken}}">
                                                 <div class="form-group">
                                                     <label for="nuevo-login" class="form-label mt-3">Nombre de usuario*</label>
                                                     <input class="form-control" required id="nuevo-login" placeholder="Username" name="username">
