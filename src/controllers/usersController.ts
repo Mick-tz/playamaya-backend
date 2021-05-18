@@ -1,31 +1,46 @@
 import { Request, Response } from 'express';
 import { ILogin, Login } from '../models/usuario';
 
-const ejemploUsuario = {
-    uuid: '1',
-    username: 'willyColon',
-    nombres: 'william',
-    apellidos: 'colon'
-}
-
-const ejemploList = [ejemploUsuario]
+const PER_PAGE_RESULTS = 20;
 
 class UserController {
-    public renderIndex (req: Request, res: Response): void {
-        res.send({ usuarios: ejemploList })
+    public async renderIndex (req: Request, res: Response): Promise<void> {
+        const pagina = parseInt(req.params.pagina) || 0;
+        try {
+            const usuarios = await Login.find()
+                .sort('-createdAt')
+                .limit(PER_PAGE_RESULTS)
+                .skip(pagina*PER_PAGE_RESULTS)
+                .select('-createdAt -updatedAt');
+            res.send({ usuarios });
+        } catch (error) {
+            res.status(400).send({ error });
+        }
     }
 
-    public renderUser (req: Request, res: Response): void {
-        const usuario = ejemploList.filter(user => (user.uuid === req.params.id));
-        const status = (usuario[0]) ? 200 : 404;
-        res.status(status).send({ usuario: usuario[0] || [] });
+    public async renderUser (req: Request, res: Response): Promise<void> {
+        const id = req.params.id || -1;
+        try {
+            if (id === -1) {
+                throw new Error("Usuario invalido");
+            }
+            const usuario = await Login.findOne({_id: id})
+                .select('-createdAt -updatedAt');
+            res.status(200).send({ usuario });
+        } catch (error) {
+            res.status(404).send({error});
+        }
     }
-    public async addUser (req: Request, res: Response): Promise<void> {
+
+    public async addUser (req: Request, res: Response) {
         const { username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password } = req.body
-        let user: ILogin = new Login({ username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password })
-        user = await user.save()
-        res.redirect(`/api/usuarios/${user._id }`)
-        // res.send('Si claro si claro')
+        let usuario: ILogin = new Login({ username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password })
+        try {
+            await usuario.save()
+            res.status(201).send({ usuario });
+        } catch (error) {
+            res.status(400).send({ error });   
+        }
     }
 }
 

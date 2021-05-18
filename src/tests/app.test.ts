@@ -25,7 +25,7 @@ describe('users server', () => {
     })
     it('GET /api/usuarios/:id --> usuario existente', () => {
         return request(app)
-            .get('/api/usuarios/1')
+            .get('/api/usuarios/60a40510b3312223b992ccb9')
             .expect('Content-Type', /json/)
             .expect(200)
             .then((response: any) => {
@@ -51,10 +51,13 @@ describe('users server', () => {
         return request(app)
             .post('/api/usuarios').send({
                 username: 'billyElliot',
-                password: 'qwerty7890',
+                password: 'qwertyasdfg7890',
                 nombres: 'William',
                 apellidos: 'Elliot',
-                telefono: '9876543210'
+                telefono: '9876543210',
+                email: 'test@email.com',
+                genero: 'hombre',
+                fechaNacimiento: '2010-02-26'
             })
             .expect('Content-Type', /json/)
             .expect(201)
@@ -70,13 +73,13 @@ describe('users server', () => {
                 )
             });
     });
-    it('POST /api/usuarios -- valida el contenido del request', () => {
+    it('POST /api/usuarios -- valida el contenido de un request invalido', () => {
         return request(app)
-            .post('/api/usuarios')
-            .send({
+            .post('/api/usuarios').send({
                 username: 123
             })
-            .expect(422);
+            .expect('Content-Type', /json/)
+            .expect(400);
     });
     // it('PUT /api/usuarios/:id --> modifica un usuario', () => {})
     // it('DELETE /api/usuarios/:id --> elimina un usuario', () => {})
