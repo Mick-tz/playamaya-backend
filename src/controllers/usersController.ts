@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ILogin, Login } from '../models/usuario';
 
 const ejemploUsuario = {
     uuid: '1',
@@ -19,9 +20,12 @@ class UserController {
         const status = (usuario[0]) ? 200 : 404;
         res.status(status).send({ usuario: usuario[0] || [] });
     }
-    public addUser (req: Request, res: Response): void {
-        console.log(req.body);
-        res.send('Si claro si claro')
+    public async addUser (req: Request, res: Response): Promise<void> {
+        const { username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password } = req.body
+        let user: ILogin = new Login({ username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password })
+        user = await user.save()
+        res.redirect(`/api/usuarios/${user._id }`)
+        // res.send('Si claro si claro')
     }
 }
 
