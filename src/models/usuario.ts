@@ -1,9 +1,10 @@
-import mongoose, { Schema, model, Document } from 'mongoose';
+import mongoose, { Schema, Model, model, Document } from 'mongoose';
 import bycrypt from 'bcryptjs';
 const validator = require("validator");
 
 // strongly typed model
 export interface ILogin extends Document {
+    // propiedades
     username: string;
     email: string;
     nombres: string;
@@ -12,6 +13,12 @@ export interface ILogin extends Document {
     genero?: string;
     fechaNacimiento?: Date;
     password: string;
+
+}
+
+export interface ILoginModel extends Model<ILogin> {
+    // methods
+    findByCredentials(identifier:string, password:string): Promise<ILogin>
 }
 
 const loginSchema = new Schema({
@@ -91,6 +98,27 @@ const loginSchema = new Schema({
     }
 });
 
+loginSchema.statics.findByCredentials = async (identifier:string, password:string) => {
+    let usuario;
+    if (identifier.includes('@')) {
+        usuario = await Login.findOne({email: identifier});
+    } else {
+        usuario = await Login.findOne({username: identifier});
+    }
+
+    if (!usuario) {
+        throw new Error('Unable to login')
+    }
+
+    const isValid = await bycrypt.compare(password, usuario.password)
+
+    if (!isValid) {
+        throw new Error('Unable to login')
+    } else {
+        return usuario;
+    }
+}
+
 loginSchema.methods.genAuthToken = async function () {
     const login = (this as ILogin);
     console.log(login);
@@ -114,4 +142,4 @@ loginSchema.pre('save', async function(next) {
     next()
 })
 
-export const Login = model<ILogin>('login', loginSchema);
+export const Login: ILoginModel = model<ILogin, ILoginModel>('login', loginSchema);
