@@ -48,7 +48,16 @@ class UserController {
         }
     }
 
-    public async addUser (req: Request, res: Response) {
+    public async logoutUser (req: any, res: Response): Promise<void> {
+        try {
+            req.session.reset();
+            res.status(200).send({ status: 200 })
+        } catch (error) {
+            res.status(401).send({error: 'Unable to logout'})
+        }
+    }
+
+    public async addUser (req: Request, res: Response): Promise<void> {
         const { username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password } = req.body
         let usuario: ILogin = new Login({ username, email, nombres, apellidos, telefono, genero, fechaNacimiento, password })
         try {
@@ -59,13 +68,32 @@ class UserController {
         }
     }
 
-    public async deleteUser (req: any, res: Response) { // TODO: Fix asignación de any
+    public async deleteUser (req: any, res: Response): Promise<void> { // TODO: Fix asignación de any
         try {
             await req.usuario.remove()
             delete req.session.userId
             res.send(req.usuario)
         } catch (error) {
             res.status(400).send({error})
+        }
+    }
+
+    public async patchUser (req: any, res: Response): Promise<any> { // TODO: Fix asignación de any
+        try {
+            const updates = Object.keys(req.body).filter(u=> u !== '_csrf');
+            const allowedUpdates = ['nombres', 'apellidos', 'email', 'password', 'genero', 'fechaNacimiento'];
+            const isValid = updates.every(updateField => allowedUpdates.includes(updateField));
+            if (!isValid) {
+                return res.status(400).send({error: 'Invalid updates'});
+            }
+
+            // debe pasar por "auth", por lo tanto, req.usuario debe contener la info del usuario si este esta autenticado
+            const usuario = req.usuario;
+            updates.forEach(update => usuario[update] = req.body[update]);
+            await usuario.save();
+            res.status(200).send({usuario});
+        } catch (error) {
+            res.status(401).send({error});
         }
     }
 }
