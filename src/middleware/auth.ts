@@ -12,6 +12,6 @@ export const auth = async (req: any, res: Response, next: NextFunction) => { // 
         req.usuario = usuario;
         next()
     } catch (error) {
-        res.status(400).send({ error: 'usuario no autenticado '});
+        res.status(401).send({ error: 'usuario no autenticado '});
     }
 }
