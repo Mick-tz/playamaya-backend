@@ -2,18 +2,23 @@ import { Request, Response } from 'express';
 import { IRequest } from '../interfaces/IReq';
 import { ILogin, Login } from '../models/usuario';
 
-const PER_PAGE_RESULTS = 20;
+const PER_PAGE_RESULTS = 5;
 
 class UserController {
-    public async renderIndex (req: Request, res: Response): Promise<void> {
-        const pagina = parseInt(req.params.pagina) || 0;
+    public async renderIndex (req: IRequest, res: Response): Promise<void> {
+        const pagina = (req.query.pagina) ? parseInt(req.query.pagina): 0;
         try {
-            const usuarios: ILogin[] = await Login.find()
+            Login.find()
                 .sort('-createdAt')
                 .limit(PER_PAGE_RESULTS)
                 .skip(pagina*PER_PAGE_RESULTS)
-                .select('-createdAt -updatedAt');
-            res.send({ usuarios });
+                .select('-createdAt -updatedAt')
+                .exec((err, data) => {
+                    if (err) throw err;
+                    Login.countDocuments({}).exec((err, count) => {
+                        res.send({ usuarios: data, pagination_info: { pagina, num_paginas: Math.ceil(count / PER_PAGE_RESULTS)} });
+                    })
+                });
         } catch (error) {
             res.status(400).send({ error });
         }
@@ -39,7 +44,7 @@ class UserController {
             req.session.userId = usuario._id;
             res.send({ usuario });
         } catch (error) {
-            res.sendStatus(401)
+            res.status(401).send({ error: 'Unable to login' })
         }
     }
 
