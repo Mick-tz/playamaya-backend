@@ -53,9 +53,6 @@ describe('USUARIOS', () => {
             .type('form')
             .send({login: username, password, _csrf: csrfToken});
 
-        console.log(res.status);
-        
-
         cookies = res.headers['set-cookie'];
     }
 
@@ -222,16 +219,70 @@ describe('USUARIOS', () => {
                 .expect('Content-Type', /json/);
         });
     });
+    // ¡CUIDADO! Este módulo debe ir antes de el módulo de delete para asegurar que el usuario a modificar existe
+    // ¡CUIDADO! Si modificas el usuario (contraseña o correo), modificar los campos correspondientes para no romper la función getSession 
     describe('PATCH /', () => {
-        // ¡CUIDADO! Este módulo debe ir antes de el módulo de delete para asegurar que el usuario a modificar existe
         it('PATCH /api/usuarios/me --> cambia los nombres de un usuario', async () => {
-            throw new Error('to be implemented')
+            await getSession();
+
+            const patchInfo = {
+                nombres: 'megatron',
+                _csrf: csrfToken
+            }
+
+            return request(app)
+                .patch('/api/usuarios/me')
+                .set('Cookie', cookies)
+                .type('form')
+                .send(patchInfo)
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .then((response: Response) => {
+                    expect(response.body.usuario).toEqual(
+                        expect.objectContaining({
+                            nombres: "megatron"
+                        })
+                    )
+                });
         });
-        it('PATCH /api/usuarios/me --> cambia los apellidos de un usuario', async () => {
-            throw new Error('to be implemented')
+        it('PATCH /api/usuarios/me --> cambia el correo de un usuario', async () => {
+            await getSession();
+
+            const patchInfo = {
+                email: 'megatron@test.com',
+                _csrf: csrfToken
+            }
+
+            return request(app)
+                .patch('/api/usuarios/me')
+                .set('Cookie', cookies)
+                .type('form')
+                .send(patchInfo)
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .then((response: Response) => {
+                    expect(response.body.usuario).toEqual(
+                        expect.objectContaining({
+                            email: "megatron@test.com"
+                        })
+                    )
+                });
         });
-        it('PATCH /api/usuarios/me --> cambia el genero de un usuario', async () => {
-            throw new Error('to be implemented')
+        it('PATCH /api/usuarios/me --> falla en cambiar los apellidos de un usuario sin sesión activa', async () => {
+            await getCsrfs();
+
+            const patchInfo = {
+                apellidos: 'bonaparte',
+                _csrf: csrfToken
+            }
+
+            return request(app)
+                .patch('/api/usuarios/me')
+                .set('Cookie', cookies)
+                .type('form')
+                .send(patchInfo)
+                .expect(401)
+                .expect('Content-Type', /json/);
         });
     })
     describe('DELETE /', () => {
@@ -259,7 +310,7 @@ describe('USUARIOS', () => {
                     _csrf: csrfToken
                 })
                 .expect('Content-Type', /json/)
-                .expect(400);
+                .expect(401);
         })
     });
     // it('PUT /api/usuarios/:id --> modifica un usuario', () => {})
