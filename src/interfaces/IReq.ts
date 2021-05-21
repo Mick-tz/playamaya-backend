@@ -1,5 +1,9 @@
 import { Request } from "express"
 
 export interface IRequest extends Request {
-    session: any
+    query: {
+        pagina?: string;
+        nombres?: string;
+        apellidos?: string;
+    },
 }
