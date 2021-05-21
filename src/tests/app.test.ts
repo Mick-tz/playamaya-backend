@@ -45,7 +45,7 @@ describe('USUARIOS', () => {
         csrfToken = ($('[name=_csrf]')[0]).attribs.value;
         cookies = res.headers['set-cookie'];
         return res;
-    };
+    }
     const getSession = async () => {
         await getCsrfs();
         const res = await request(app).post(`/api/usuarios/login`)
@@ -58,6 +58,7 @@ describe('USUARIOS', () => {
 
         cookies = res.headers['set-cookie'];
     }
+
     describe(`GET /`, () => {
         it('GET /api/usuarios --> array usuarios', () => {
             return request(app)
@@ -156,7 +157,7 @@ describe('USUARIOS', () => {
                     )
                 });
         });
-        it('POST /api/usuarios -- valida el contenido de un request invalido', async () => {
+        it('POST /api/usuarios --> valida el contenido de un request invalido', async () => {
             await getCsrfs();
             return request(app)
                 .post('/api/usuarios')
@@ -169,9 +170,72 @@ describe('USUARIOS', () => {
                 .expect(400)
                 .expect('Content-Type', /json/);
         });
+        // ¡CUIDADO! Este post debe ir después del post de CREATE para poder autenticar el usuario recien creado.
+        it('POST /api/usuarios/login --> autentica a un usuario usando username y password', async () => {
+            await getCsrfs();
+            return request(app)
+                .post('/api/usuarios/login')
+                .set('Cookie', cookies)
+                .type('form')
+                .send({
+                    login: username,
+                    password,
+                    _csrf: csrfToken
+                })
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then((response: Response) => {
+                    expect(response.body.usuario).toEqual(expect.objectContaining({
+                        username: expect.any(String),
+                        email: expect.any(String),
+                        nombres: expect.any(String),
+                        apellidos: expect.any(String)
+                    }));
+                });
+        });
+        it('POST /api/usuarios/login --> falla en autenticar a un usuario (pwd incorrecta)', async () => {
+            await getCsrfs();
+            return request(app)
+                .post('/api/usuarios/login')
+                .set('Cookie', cookies)
+                .type('form')
+                .send({
+                    login: username,
+                    password: 'EstaNoEsMiPWD',
+                    _csrf: csrfToken
+                })
+                .expect(401)
+                .expect('Content-Type', /json/);
+        });
+        it('POST /api/usuarios/login --> falla en autenticar a un usuario (usuarios inexistente)', async () => {
+            await getCsrfs();
+            return request(app)
+                .post('/api/usuarios/login')
+                .set('Cookie', cookies)
+                .type('form')
+                .send({
+                    login: 'Colibrilya',
+                    password,
+                    _csrf: csrfToken
+                })
+                .expect(401)
+                .expect('Content-Type', /json/);
+        });
     });
-    // CUIDADO, ESTE DELETE DEBE IR DESPUES DEL POST PARA ASEGURAR QUE EXISTE EL USUARIO QUE SE VA A ELIMINAR
+    describe('PATCH /', () => {
+        // ¡CUIDADO! Este módulo debe ir antes de el módulo de delete para asegurar que el usuario a modificar existe
+        it('PATCH /api/usuarios/me --> cambia los nombres de un usuario', async () => {
+            throw new Error('to be implemented')
+        });
+        it('PATCH /api/usuarios/me --> cambia los apellidos de un usuario', async () => {
+            throw new Error('to be implemented')
+        });
+        it('PATCH /api/usuarios/me --> cambia el genero de un usuario', async () => {
+            throw new Error('to be implemented')
+        });
+    })
     describe('DELETE /', () => {
+        // CUIDADO, ESTE DELETE DEBE IR DESPUES DEL POST PARA ASEGURAR QUE EXISTE EL USUARIO QUE SE VA A ELIMINAR
         it('DELETE /api/usuarios/me --> autentica y elimina a un usuario', async () => {
             await getSession();
             return request(app)
@@ -184,6 +248,19 @@ describe('USUARIOS', () => {
                 .expect(200)
                 .expect('Content-Type', /json/);
         });
+
+        it('DELETE /api/usuarios/me --> intenta eliminar un usuario y falla al no estar autenticado', async () => {
+            await getCsrfs();
+            return request(app)
+                .delete('/api/usuarios/me')
+                .set('Cookie', cookies)
+                .type('form')
+                .send({
+                    _csrf: csrfToken
+                })
+                .expect('Content-Type', /json/)
+                .expect(400);
+        })
     });
     // it('PUT /api/usuarios/:id --> modifica un usuario', () => {})
     // it('DELETE /api/usuarios/:id --> elimina un usuario', () => {})
