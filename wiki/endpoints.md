@@ -2,63 +2,90 @@
 
 #### Usuarios
 
+---
+
+*OBS: Todas las formas deben contener un csrftoken*
+
+*OBS: Los endpoints marcados con  "auth_required" requieren que el user esté autenticado (via una cookie de sesión firmada y encriptada por el server)*
+
 ```
-GET - api/usuarios?apellidos=Str&nombres=Str
+GET - api/usuarios?apellidos=Str&nombres=Str&pagina=int
 (Regresa el perfil de usuario, ordenados alfabéticamente por apellido, 20 por página)
 
-  response:
-    {
-      "usuarios": Array[Usuario],
-      "pagintation_info": PaginationInfo,
-    }
+response:
+  {
+    "usuarios": Array[Usuario],
+    "pagintation_info": PaginationInfo,
+  }
 
-GET - api/usuario/:id
+GET - api/usuarios/:id
   response:
     {
       "usuario": Usuario,
     }
 
-POST - api/usuario
-  response: 
+POST - api/usuarios
+  request:
     {
-      "usuario": Usuario
+      Login
     }
 
-PUT - api/usuario/
-  response: 
-    {
-      "usuario": Usuario
-    }
-
-DELETE - api/usuario/:id
   response:
     {
       "usuario": Usuario
     }
 
-```
-
-#### Login
-
-```
-POST - api/login
-  response:
+POST - api/usuarios/login
+(regresa la info del usuario autenticado y la cookie de sesión)
+  request:
     {
-      "usuario": Usuario || Profesor
-      "Bearer": Token
+      login: email || username,
+      password
     }
 
-POST - api/logout
-    response:
-      {
-        "status": HTTPStatus
-      }
+  response:
+    {
+      "usuario": Usuario
+    }
 
-POST - api/reset_password
+POST - api/usuarios/reset_password
+(envía correo con liga para reset de password)
+  request:
+    {
+      login: email || username,
+    }
+
   response
     {
       "status": HTTPStatus
     }
+
+POST - api/usuarios/logout
+(destruye la sesión, en caso de que exista)
+  response:
+    {
+       "status": HTTPStatus
+    }
+
+
+PATCH - api/usuarios/me
+  response:
+    {
+      "usuario": Usuario
+    }
+
+DELETE - api/usuarios/me
+  response:
+    {
+      "usuario": Usuario
+    }
+```
+
+
+#### Perfil
+
+```
+TODO: Definir
 ```
 
 #### Profesores
@@ -100,6 +127,7 @@ DELETE - api/profesor/:id
 ```
 
 ### Clases
+
 ```
 (Regresa las clases, ordenados crecientemente temporalmente, 20 por página)
 
@@ -137,8 +165,8 @@ response:
     }
 ```
 
-
 ### Sociales
+
 ```
 (Regresa los sociales ordenados crecientemente temporalmente, 20 por página)
 
