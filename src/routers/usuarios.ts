@@ -9,7 +9,7 @@ router.get('/usuarios',  userController.renderIndex);
 router.get('/usuarios/:id',  userController.renderUser);
 // POST
 router.post('/usuarios/login', userController.loginUser);
-router.post('/usuarios/logout', userController.logoutUser);
+router.post('/usuarios/logout', auth, userController.logoutUser);
 router.post('/usuarios', userController.addUser);
 // PATCH
 router.patch('/usuarios/me', auth, userController.patchUser);
