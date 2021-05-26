@@ -34,7 +34,7 @@ class UserController {
                 .select('-createdAt -updatedAt');
             res.status(200).send({ usuario });
         } catch (error) {
-            res.status(404).send({error});
+            res.status(404).send({status: 404});
         }
     }
 
@@ -72,7 +72,7 @@ class UserController {
         try {
             await req.usuario.remove()
             delete req.session.userId
-            res.send(req.usuario)
+            res.send({usuario: req.usuario})
         } catch (error) {
             res.status(400).send({error})
         }
