@@ -10,6 +10,16 @@
         </div>
     </div>
 </div>
+<div class="container-fluid">
+    <div class="row mt-2">
+        <div class="col-12 p-0">
+            <div class="alerta-respuesta alert alert-success alert-dismissible fade" role="alert">
+                <strong class="alerta-respuesta-strong"></strong> <span class="alerta-respuesta-text"> You should check in on some of those fields below.</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row mt-5">
@@ -130,11 +140,71 @@
                             </div>
                         </div>
                     </div>
+                    {{!-- GET - usuarios/:id  --}}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="usuarios-get-by-id-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsuariosGetById" aria-expanded="false" aria-controls="collapseUsuariosGetById">
+                            <span class="bg-secondary mr-3 py-2 px-4 method-display"><strong>GET</strong></span> <span class="font-weight-bold mx-3"><strong>/usuarios/:id</strong></span> <span class="text-muted"><small>Devuelve perfil de usuario por id</small></span>
+                        </button>
+                        </h2>
+                        <div id="collapseUsuariosGetById" class="accordion-collapse collapse" aria-labelledby="usuarios-get-by-id-header" data-bs-parent="#acordeon-usuarios">
+                        <div class="accordion-body">
+                                <div class="row mb-2">
+                                    <div class="col-12 bg-dark rounded py-2">
+                                        <h6 class="pt-2 text-decoration-underline">Parámetros</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 p-0">
+                                        <div class="card border-dark">
+                                            <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Descripción</th>
+                                                </tr>
+                                            </thead>
+                                            {{!-- <tbody>
+                                                <tr class="table-secondary">
+                                                    <td>
+                                                        <span class="text-primary"><strong>pagina</strong></span> <br>
+                                                        <span class="small"><em>integer</em></span><br>
+                                                        <span class="small">(query)</span><br>
+                                                    </td>
+                                                    <td>
+                                                        Página a consultar <br>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span class="text-primary"><strong>apellidos</strong></span> <br>
+                                                        <span class="small"><em>string</em></span><br>
+                                                        <span class="small">(query)</span><br>
+                                                    </td>
+                                                    <td>Apellidos del usuarios, busca usando contain</td>
+                                                    </tr>
+                                                <tr class="table-secondary">
+                                                    <td>
+                                                        <span class="text-primary"><strong>nombres</strong></span> <br>
+                                                        <span class="small"><em>string</em></span><br>
+                                                        <span class="small">(query)</span><br>
+                                                    </td>
+                                                    <td>Nombres del usuarios, busca usando contain</td>
+                                                </tr>
+                                            </tbody> --}}
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        </div>
+                    </div>
                     {{!-- POST - usuarios  --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="usuarios-post-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsuariosPost" aria-expanded="false" aria-controls="collapseUsuariosPost">
-                            <span class="bg-secondary mr-3 py-2 px-4 method-display"><strong>POST</strong></span> <span class="font-weight-bold mx-3"><strong>/usuarios</strong></span> <span class="text-muted"><small>Generación de un nuevo usuario</small></span>
+                            <span class="bg-secondary mr-3 py-2 px-4 method-display"><strong>POST</strong></span> <span class="font-weight-bold mx-3"><strong>/usuarios</strong></span> <span class="text-muted"><small>Genera un nuevo usuario</small></span>
                         </button>
                         </h2>
                         <div id="collapseUsuariosPost" class="accordion-collapse collapse" aria-labelledby="usuarios-post-header" data-bs-parent="#acordeon-usuarios">
@@ -347,66 +417,6 @@
                             </div>
                         </div>
                     </div>
-                    {{!-- GET - usuarios/:id  --}}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="usuarios-get-by-id-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsuariosGetById" aria-expanded="false" aria-controls="collapseUsuariosGetById">
-                            <span class="bg-secondary mr-3 py-2 px-4 method-display"><strong>GET</strong></span> <span class="font-weight-bold mx-3"><strong>/usuarios/:id</strong></span> <span class="text-muted"><small>Devuelve perfil de usuario por id</small></span>
-                        </button>
-                        </h2>
-                        <div id="collapseUsuariosGetById" class="accordion-collapse collapse" aria-labelledby="usuarios-get-by-id-header" data-bs-parent="#acordeon-usuarios">
-                        <div class="accordion-body">
-                                <div class="row mb-2">
-                                    <div class="col-12 bg-dark rounded py-2">
-                                        <h6 class="pt-2 text-decoration-underline">Parámetros</h6>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 p-0">
-                                        <div class="card border-dark">
-                                            <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Descripción</th>
-                                                </tr>
-                                            </thead>
-                                            {{!-- <tbody>
-                                                <tr class="table-secondary">
-                                                    <td>
-                                                        <span class="text-primary"><strong>pagina</strong></span> <br>
-                                                        <span class="small"><em>integer</em></span><br>
-                                                        <span class="small">(query)</span><br>
-                                                    </td>
-                                                    <td>
-                                                        Página a consultar <br>
-
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span class="text-primary"><strong>apellidos</strong></span> <br>
-                                                        <span class="small"><em>string</em></span><br>
-                                                        <span class="small">(query)</span><br>
-                                                    </td>
-                                                    <td>Apellidos del usuarios, busca usando contain</td>
-                                                    </tr>
-                                                <tr class="table-secondary">
-                                                    <td>
-                                                        <span class="text-primary"><strong>nombres</strong></span> <br>
-                                                        <span class="small"><em>string</em></span><br>
-                                                        <span class="small">(query)</span><br>
-                                                    </td>
-                                                    <td>Nombres del usuarios, busca usando contain</td>
-                                                </tr>
-                                            </tbody> --}}
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                        </div>
-                    </div>
                     {{!-- POST - usuarios/login  --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="usuarios-login-post-header">
@@ -547,6 +557,133 @@
                             </div>
                         </div>
                     </div>
+                    {{!-- POST - usuarios/logout  --}}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="usuarios-logout-post-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsuariosLogoutPost" aria-expanded="false" aria-controls="collapseUsuariosLogoutPost">
+                            <span class="bg-secondary mr-3 py-2 px-4 method-display"><strong>POST</strong></span> <span class="font-weight-bold mx-3"><strong>/usuarios/logout</strong></span> <span class="text-muted"><small>Logout de usuario</small></span>
+                        </button>
+                        </h2>
+                        <div id="collapseUsuariosLogoutPost" class="accordion-collapse collapse" aria-labelledby="usuarios-logout-post-header" data-bs-parent="#acordeon-usuarios">
+                            <div class="accordion-body">
+                                {{!-- tabla de query string para el request  --}}
+                                <div class="row mb-2">
+                                    <div class="col-12 bg-dark rounded py-2">
+                                        <h6 class="pt-2 text-decoration-underline">Parámetros</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 p-0">
+                                        <div class="card border-dark">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                    <th scope="col">Nombre</th>
+                                                    <th scope="col">Descripción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="table-secondary">
+                                                        <td>
+                                                            <span class="text-primary"><strong>No aplica</strong></span> <br>
+                                                        </td>
+                                                        <td>
+                                                            No aplica<br>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{!-- tabla de respuesta  --}}
+                                <div class="row mb-2 mt-3">
+                                    <div class="col-12 bg-dark rounded py-2">
+                                        <h6 class="pt-2 text-decoration-underline">Reponse</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 p-0">
+                                        <div class="card border-dark">
+                                            <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col">Código</th>
+                                                <th scope="col">Descripción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="table-secondary">
+                                                    <td>
+                                                        <span class="text-primary"><strong>200</strong></span> <br>
+                                                    </td>
+                                                    <td>
+                                                        HTTP 200 OK <br>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="form-group my-2">
+                                                                    <label for="types-get-usuarios" class="form-label mt-1 small">Media type:</label>
+                                                                    <select class="form-select" id="types-get-usuarios">
+                                                                        <option>application/json</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        Ejemplo: <br>
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <p class="card-text">
+                                                                    acá vendría el ejemplo de una respuesta
+
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{!-- botones de prueba  --}}
+                                <div class="row mt-5">
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUsuariosLogoutPost">
+                                            Probar servicio
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Modal de post de usuarios -->
+                                <div class="modal fade" id="modalUsuariosLogoutPost" tabindex="-1" aria-labelledby="modalUsuariosLogoutPostLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalUsuariosLogoutPostLabel">Logout user</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-12 text-center">
+                                            <p>
+                                                ¿Estás seguro que quieres continuar? <strong> Confirmar logout de usuario autenticado.</strong>
+                                            </p>
+                                        </div>
+                                        <form method="POST" action="/api/usuarios/logout" class="forma-logout-usuario">
+                                            <fieldset>
+                                                <input type="hidden", name="_csrf", value="{{csrfToken}}">
+                                                <div class="mt-4">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Logout</button>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {{!-- DELETE - usuarios/me --}}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="usuarios-delete-header">
@@ -649,7 +786,12 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modalUsuariosDeleteLabel">DELETE usuario</h5>
+                                        <h5 class="modal-title" id="modalUsuariosDeleteLabel">
+                                            <div class="spinner-cargando-delete-usuario spinner-border mx-2 d-none" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            DELETE usuario
+                                        </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -661,9 +803,13 @@
                                         <form class="forma-delete-usuario">
                                             <fieldset>
                                                 <input class="csrfInput" type="hidden", name="_csrf", value="{{csrfToken}}">
-                                                <div class="mt-4">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button class="btn btn-primary" id="btnEliminarUsuario">Eliminar usuario</button>
+                                                <div class="mt-2">
+                                                    <div class="row py-1">
+                                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                    <div class="row py-1">
+                                                    <button class="btn btn-danger" id="btnEliminarUsuario">Eliminar usuario</button>
+                                                    </div>
                                                 </div>
                                             </fieldset>
                                         </form>
